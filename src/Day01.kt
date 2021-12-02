@@ -11,9 +11,8 @@ fun main() {
         return input
             .asSequence()
             .map { it.toInt() }
-            .zipWithNext()
-            .zipWithNext()
-            .map { (p1, p2) -> p1.first + p1.second + p2.second }
+            .windowed(3)
+            .map { it.sum() }
             .zipWithNext()
             .count { (x, y) -> y > x }
     }
