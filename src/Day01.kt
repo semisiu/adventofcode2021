@@ -2,7 +2,7 @@ fun main() {
     fun part1(input: List<String>): Int {
         return input
             .asSequence()
-            .map { Integer.valueOf(it) }
+            .map { it.toInt() }
             .zipWithNext()
             .count { (x, y) -> y > x }
     }
@@ -10,7 +10,7 @@ fun main() {
     fun part2(input: List<String>): Int {
         return input
             .asSequence()
-            .map { Integer.valueOf(it) }
+            .map { it.toInt() }
             .zipWithNext()
             .zipWithNext()
             .map { (p1, p2) -> p1.first + p1.second + p2.second }
