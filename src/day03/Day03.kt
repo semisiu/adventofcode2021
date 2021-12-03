@@ -30,7 +30,7 @@ fun main() {
 
         data class GammaEpsilonAcc(val gamma: Int, val epsilon: Int, val powerOfTwo: Int)
 
-        val resultAcc = summary
+        val gammaEpsilon = summary
             .onesCount
             .zip(summary.zerosCount) { onesCount, zerosCount -> onesCount > zerosCount }
             .reversed()
@@ -45,7 +45,7 @@ fun main() {
                         powerOfTwo = acc.powerOfTwo * 2
                     )
             }
-        return resultAcc.gamma * resultAcc.epsilon
+        return gammaEpsilon.gamma * gammaEpsilon.epsilon
     }
 
     fun part2(input: List<DiagnosticResult>): Int {
@@ -54,14 +54,12 @@ fun main() {
             bitNumber: Int,
             predicate: (List<DiagnosticResult>, List<DiagnosticResult>) -> Boolean
         ): DiagnosticResult {
-            if (input.size == 1) {
-                return input[0]
-            }
+            if (input.size == 1) return input[0]
 
             val groupBy = input.groupBy { it.bits[bitNumber] }
 
-            val ones = groupBy.getOrDefault('1', emptyList())
             val zeros = groupBy.getOrDefault('0', emptyList())
+            val ones = groupBy.getOrDefault('1', emptyList())
 
             val keep = if (predicate(ones, zeros)) ones else zeros
             return calculateRating(keep, bitNumber + 1, predicate)
