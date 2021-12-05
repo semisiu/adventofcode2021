@@ -5,16 +5,10 @@ import readInput
 fun main() {
     fun part1(input: List<String>): Int {
         val bingoGame = loadBoards(input)
-        val chosenNumbers = input.first().splitToSequence(",").map { it.toInt() }.toList()
+        val chosenNumbers = input.first().splitToSequence(",").map { it.toInt() }
 
-        val firstWinningBoard = chosenNumbers
-            .flatMap { number ->
-                bingoGame.markNumber(number)
-                    .map { winningBoard ->
-                        val sum = winningBoard.unmarkedNumbers().sum()
-                        number to sum
-                    }
-            }
+        val firstWinningBoard = bingoGame
+            .markNumbers(chosenNumbers)
             .first()
 
         return firstWinningBoard.first * firstWinningBoard.second
@@ -22,16 +16,10 @@ fun main() {
 
     fun part2(input: List<String>): Int {
         val bingoGame = loadBoards(input)
-        val chosenNumbers: Sequence<Int> = input.first().splitToSequence(",").map { it.toInt() }
+        val chosenNumbers = input.first().splitToSequence(",").map { it.toInt() }
 
-        val lastWinningBoard = chosenNumbers
-            .flatMap { number ->
-                bingoGame.markNumber(number)
-                    .map { winningBoard ->
-                        val sum = winningBoard.unmarkedNumbers().sum()
-                        number to sum
-                    }
-            }
+        val lastWinningBoard = bingoGame
+            .markNumbers(chosenNumbers)
             .last()
 
         return lastWinningBoard.first * lastWinningBoard.second
@@ -61,9 +49,10 @@ class BingoBoard(matrixInput: List<Int>) {
 
     private var isWinning = false
 
-    private fun cells() = matrix.values
-
-    fun unmarkedNumbers() = cells().filterNot { it.isMarked() }.map { it.getValue() }
+    fun unmarkedNumbers() = matrix
+        .values
+        .filterNot { it.isMarked() }
+        .map { it.getValue() }
 
     // returns true if bingo!
     fun markNumber(value: Int) =
@@ -117,7 +106,17 @@ class BingoBoard(matrixInput: List<Int>) {
 }
 
 class BingoGame(private val boards: List<BingoBoard>) {
-    fun markNumber(value: Int) = boards.filter { board -> board.markNumber(value) }
+    fun markNumbers(chosenNumbers: Sequence<Int>) =
+        chosenNumbers
+            .flatMap { number ->
+                boards
+                    .filter { board -> board.markNumber(number) }
+                    .map { winningBoard ->
+                        val sum = winningBoard.unmarkedNumbers().sum()
+                        number to sum
+                    }
+            }
+
 }
 
 data class Point(val rowNr: Int, val colNr: Int)
