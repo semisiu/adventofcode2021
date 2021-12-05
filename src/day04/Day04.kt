@@ -7,22 +7,26 @@ fun main() {
         val bingoGame = loadBoards(input)
         val chosenNumbers = input.first().splitToSequence(",").map { it.toInt() }
 
-        val firstWinningBoard = bingoGame
+        return bingoGame
             .markNumbers(chosenNumbers)
+            .map { (number, winningBoard) ->
+                val sum = winningBoard.unmarkedNumbers().sum()
+                number * sum
+            }
             .first()
-
-        return firstWinningBoard.first * firstWinningBoard.second
     }
 
     fun part2(input: List<String>): Int {
         val bingoGame = loadBoards(input)
         val chosenNumbers = input.first().splitToSequence(",").map { it.toInt() }
 
-        val lastWinningBoard = bingoGame
+        return bingoGame
             .markNumbers(chosenNumbers)
+            .map { (number, winningBoard) ->
+                val sum = winningBoard.unmarkedNumbers().sum()
+                number * sum
+            }
             .last()
-
-        return lastWinningBoard.first * lastWinningBoard.second
     }
 
     // test if implementation meets criteria from the description, like:
@@ -111,12 +115,8 @@ class BingoGame(private val boards: List<BingoBoard>) {
             .flatMap { number ->
                 boards
                     .filter { board -> board.markNumber(number) }
-                    .map { winningBoard ->
-                        val sum = winningBoard.unmarkedNumbers().sum()
-                        number to sum
-                    }
+                    .map { winningBoard -> number to winningBoard }
             }
-
 }
 
 data class Point(val rowNr: Int, val colNr: Int)
