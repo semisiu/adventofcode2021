@@ -4,10 +4,16 @@ import readInput
 import kotlin.math.absoluteValue
 
 class Positions(private val values: List<Int>) {
-    fun fuelCost1(target: Int) = values.sumOf { it.distance(target) }
-    fun fuelCost2(target: Int) = values.sumOf {
-        val diff = target.distance(it)
-        diff * (diff + 1) / 2
+    private val min = values.minOrNull()!!
+    private val max = values.maxOrNull()!!
+
+    fun fuelCost1() = (min..max).minOf { fuelCost1(it) }
+    private fun fuelCost1(target: Int) = values.sumOf { it.distance(target) }
+
+    fun fuelCost2() = (min..max).minOf { fuelCost2(it) }
+    private fun fuelCost2(target: Int) = values.sumOf {
+        val distance = target.distance(it)
+        distance * (distance + 1) / 2
     }
 
     private fun Int.distance(target: Int) = (this - target).absoluteValue
@@ -17,12 +23,12 @@ fun main() {
 
     fun part1(input: List<String>): Int {
         val positions = Positions(input[0].split(",").map { it.toInt() })
-        return (0..2000).minOf { positions.fuelCost1(it) }
+        return positions.fuelCost1()
     }
 
     fun part2(input: List<String>): Int {
         val positions = Positions(input[0].split(",").map { it.toInt() })
-        return (0..2000).minOf { positions.fuelCost2(it) }
+        return positions.fuelCost2()
     }
 
     // test if implementation meets criteria from the description, like:
@@ -33,11 +39,8 @@ fun main() {
     println(part1(input))
     check(part1(input) == 340052)
 
-    val part2TestInput = part2(testInput)
-    println("part2(testInput): $part2TestInput")
-    check(part2TestInput == 168)
+    check(part2(testInput) == 168)
     println(part2(input))
     check(part2(input) == 92948968)
-
 }
 
