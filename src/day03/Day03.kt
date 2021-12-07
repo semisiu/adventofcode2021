@@ -3,7 +3,7 @@ package day03
 import readInput
 import toDecimalNumber
 
-data class DiagnosticResult(var bits: List<Char>)
+data class DiagnosticResult(val bits: List<Char>)
 
 fun main() {
 

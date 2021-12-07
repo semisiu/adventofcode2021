@@ -7,10 +7,10 @@ class Positions(private val values: List<Int>) {
     private val min = values.minOrNull()!!
     private val max = values.maxOrNull()!!
 
-    fun fuelCost1() = (min..max).minOf { fuelCost1(it) }
+    fun minFuelCost1() = (min..max).minOf { target -> fuelCost1(target) }
     private fun fuelCost1(target: Int) = values.sumOf { it.distance(target) }
 
-    fun fuelCost2() = (min..max).minOf { fuelCost2(it) }
+    fun minFuelCost2() = (min..max).minOf { target -> fuelCost2(target) }
     private fun fuelCost2(target: Int) = values.sumOf {
         val distance = target.distance(it)
         distance * (distance + 1) / 2
@@ -21,15 +21,13 @@ class Positions(private val values: List<Int>) {
 
 fun main() {
 
-    fun part1(input: List<String>): Int {
-        val positions = Positions(input[0].split(",").map { it.toInt() })
-        return positions.fuelCost1()
-    }
+    fun part1(input: List<String>) =
+        Positions(input.first().split(",").map { it.toInt() })
+            .minFuelCost1()
 
-    fun part2(input: List<String>): Int {
-        val positions = Positions(input[0].split(",").map { it.toInt() })
-        return positions.fuelCost2()
-    }
+    fun part2(input: List<String>) =
+        Positions(input.first().split(",").map { it.toInt() })
+            .minFuelCost2()
 
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("day07/Day07_test")
