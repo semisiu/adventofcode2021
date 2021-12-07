@@ -58,12 +58,12 @@ data class Point(val x: Int, val y: Int) {
 
     private operator fun plus(other: Point) = Point(x + other.x, y + other.y)
 }
-private fun Int.signum() =
-    when {
-        this == 0 -> 0
-        this < 0 -> -1
-        else -> 1
-    }
+
+private fun Int.signum() = when {
+    this == 0 -> 0
+    this < 0 -> -1
+    else -> 1
+}
 
 data class Line(val points: List<Point>) {
     val isHorizontal: Boolean by lazy { points.first().y == points.last().y }
