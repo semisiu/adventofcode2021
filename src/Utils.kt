@@ -23,3 +23,7 @@ fun List<Char>.binaryToDecimalNumber(): Int {
         }
         .sum
 }
+
+fun String.toListOfIntegers(delimiter: String = "") =
+    if (delimiter == "") map { it.toString().toInt() }
+    else split(delimiter).map { it.toInt() }
