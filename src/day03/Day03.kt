@@ -1,7 +1,7 @@
 package day03
 
 import readInput
-import toDecimalNumber
+import binaryToDecimalNumber
 
 data class DiagnosticResult(val bits: List<Char>)
 
@@ -72,8 +72,8 @@ fun main() {
             ones.size < zeros.size
         }
 
-        val oxygen = calculateRating(input, 0, oxygenPredicate).bits.toDecimalNumber()
-        val co2 = calculateRating(input, 0, co2Predicate).bits.toDecimalNumber()
+        val oxygen = calculateRating(input, 0, oxygenPredicate).bits.binaryToDecimalNumber()
+        val co2 = calculateRating(input, 0, co2Predicate).bits.binaryToDecimalNumber()
 
         return oxygen * co2
     }

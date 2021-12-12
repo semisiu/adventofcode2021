@@ -3,6 +3,7 @@ package day05
 import readInput
 import kotlin.math.absoluteValue
 import kotlin.math.max
+import kotlin.math.sign
 
 fun main() {
     fun loadLines(input: List<String>) =
@@ -50,19 +51,13 @@ data class Point(val x: Int, val y: Int) {
         val deltaX = end.x - x
         val deltaY = end.y - y
 
-        val step = Point(deltaX.signum(), deltaY.signum())
+        val step = Point(deltaX.sign, deltaY.sign)
 
         return (1..max(deltaX.absoluteValue, deltaY.absoluteValue))
             .runningFold(this) { acc, _ -> acc + step }
     }
 
     private operator fun plus(other: Point) = Point(x + other.x, y + other.y)
-}
-
-private fun Int.signum() = when {
-    this == 0 -> 0
-    this < 0 -> -1
-    else -> 1
 }
 
 data class Line(val points: List<Point>) {
