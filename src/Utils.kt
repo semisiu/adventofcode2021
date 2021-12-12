@@ -27,3 +27,6 @@ fun List<Char>.binaryToDecimalNumber(): Int {
 fun String.toListOfIntegers(delimiter: String = "") =
     if (delimiter == "") map { it.toString().toInt() }
     else split(delimiter).map { it.toInt() }
+
+fun String.isLower() = all { it.isLowerCase() }
+fun String.isUpper() = all { it.isUpperCase() }

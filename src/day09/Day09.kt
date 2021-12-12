@@ -35,8 +35,7 @@ class Locations(locations: List<List<Int>>) {
     private fun getBasin(point: Cell): Int {
         if (point.visited) return 0
         point.visited = true
-        val sum = adjacents(point).filter { it.value < 9 }.sumOf { getBasin(it) }
-        return sum + 1
+        return 1 + adjacents(point).filter { it.value < 9 }.sumOf { getBasin(it) }
     }
 }
 
