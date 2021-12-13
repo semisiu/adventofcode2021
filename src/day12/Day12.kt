@@ -12,7 +12,7 @@ data class Graph(private val edges: Map<String, Set<String>>) {
 
     fun findPathsPart1(
         node: String = "start",
-        visitedNodes: List<String> = emptyList(),
+        visitedNodes: Set<String> = emptySet(),
     ): List<Path> =
         if (node == "end") listOf(pathOf("end"))
         else {
