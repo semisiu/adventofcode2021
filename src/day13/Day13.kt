@@ -2,15 +2,10 @@ package day13
 
 import readInput
 
-data class Point(val x: Int, val y: Int) {
-    fun foldX(line: Int) = if (x > line) copy(x = line * 2 - x) else this
-    fun foldY(line: Int) = if (y > line) copy(y = line * 2 - y) else this
-}
-
 class Paper(
     private val width: Int,
     private val height: Int,
-    coords: Collection<Point>
+    coords: Collection<Pair<Int, Int>>
 ) {
     private val coords = coords.toSet()
 
@@ -30,19 +25,28 @@ class Paper(
     private fun foldAlongY(line: Int) = Paper(
         width = width,
         height = line,
-        coords = this.coords.map { it.foldY(line) }
+        coords = coords.map { it.foldY(line) }
     )
 
-    override fun toString() = (0..height).joinToString("\n") { y ->
-        (0..width).joinToString("") { x ->
-            if (Point(x, y) in coords) "#" else " "
+    private fun Pair<Int, Int>.foldX(line: Int) =
+        if (first > line) copy(first = line * 2 - first) else this
+
+    private fun Pair<Int, Int>.foldY(line: Int) =
+        if (second > line) copy(second = line * 2 - second) else this
+
+    override fun toString() =
+        (0..height).joinToString("\n") { y ->
+            (0..width).joinToString("") { x ->
+                if (x to y in coords) "#" else " "
+            }
         }
-    }
 }
 
-sealed class Along(open val line: Int) {
-    class X(override val line: Int) : Along(line)
-    class Y(override val line: Int) : Along(line)
+sealed class Along {
+    abstract val line: Int
+
+    data class X(override val line: Int) : Along()
+    data class Y(override val line: Int) : Along()
 }
 
 fun main() {
@@ -51,7 +55,7 @@ fun main() {
         val emptyLineIndex = indexOfFirst { it.isEmpty() }
         val coords = take(emptyLineIndex).map {
             val (x, y) = it.split(",", limit = 2)
-            Point(x.toInt(), y.toInt())
+            x.toInt() to y.toInt()
         }
 
         val instructions = drop(emptyLineIndex + 1).map {
@@ -60,8 +64,8 @@ fun main() {
             else Along.Y(amount.toInt())
         }
 
-        val width = coords.maxOf { it.x } + 1
-        val height = coords.maxOf { it.y } + 1
+        val width = coords.maxOf { it.first } + 1
+        val height = coords.maxOf { it.second } + 1
 
         return Paper(width, height, coords) to instructions
     }
